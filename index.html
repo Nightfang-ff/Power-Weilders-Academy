@@ -1,1 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<title>Power Wielders Academy</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    touch-action:none;
+    user-select:none;
+}
+
+body{
+    background:#090b18;
+    color:white;
+    font-family:Arial, sans-serif;
+    overflow:hidden;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    background:
+      linear-gradient(#182d5b 0%,#334c7e 48%,#101521 49%,#070911 100%);
+}
+
+/* SKY */
+#sky{
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 80% 15%,#ffffff55 0 3px,transparent 4px),
+      radial-gradient(circle at 25% 20%,#ffffff44 0 2px,transparent 3px),
+      linear-gradient(#101b42,#314d7a 55%,#111725 56%);
+}
+
+/* CITY */
+.city{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:55%;
+}
+
+.building{
+    position:absolute;
+    bottom:22%;
+    background:#151b2e;
+    border:2px solid #252e4b;
+    box-shadow:0 0 20px #0008;
+}
+
+.building span{
+    display:block;
+    width:10px;
+    height:15px;
+    background:#ffd85a;
+    margin:10px;
+    box-shadow:
+      25px 0 #ffd85a,
+      50px 0 #ffdb69,
+      75px 0 #ffd85a,
+      0 30px #ffd85a,
+      25px 30px #ffdb69,
+      50px 30px #ffd85a;
+}
+
+.b1{left:2%;width:100px;height:190px}
+.b2{left:16%;width:130px;height:250px}
+.b3{left:34%;width:110px;height:160px}
+.b4{left:51%;width:160px;height:280px}
+.b5{right:5%;width:130px;height:220px}
+
+#road{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:23%;
+    background:#171a24;
+    border-top:5px solid #4a4e5d;
+}
+
+#road:after{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    border-top:5px dashed #f8e58b;
+}
+
+/* ACADEMY */
+#academy{
+    position:absolute;
+    top:10%;
+    left:50%;
+    transform:translateX(-50%);
+    width:270px;
+    height:170px;
+    background:linear-gradient(#673d9a,#251b45);
+    border:5px solid #d3a7ff;
+    clip-path:polygon(50% 0,100% 35%,90% 100%,10% 100%,0 35%);
+    text-align:center;
+    padding-top:55px;
+    box-shadow:0 0 35px #a64dff88;
+}
+
+#academy h1{
+    font-size:22px;
+    text-shadow:0 0 8px #fff;
+}
+
+/* PLAYER */
+#player{
+    position:absolute;
+    width:48px;
+    height:70px;
+    left:50%;
+    bottom:27%;
+    transform:translateX(-50%);
+    z-index:20;
+}
+
+.head{
+    width:34px;
+    height:34px;
+    background:#f2b28d;
+    border-radius:50%;
+    margin:auto;
+    border:3px solid #111;
+}
+
+.hair{
+    position:absolute;
+    top:-3px;
+    left:8px;
+    width:34px;
+    height:20px;
+    background:#151521;
+    clip-path:polygon(0 0,100% 0,75% 60%,50% 25%,30% 70%,10% 45%);
+}
+
+.body{
+    width:40px;
+    height:38px;
+    margin:auto;
+    background:#4c9cff;
+    border:3px solid #111;
+    border-radius:10px 10px 5px 5px;
+}
+
+.powerAura{
+    position:absolute;
+    inset:-15px;
+    border-radius:50%;
+    animation:aura 1s infinite alternate;
+    pointer-events:none;
+}
+
+@keyframes aura{
+    from{box-shadow:0 0 5px #00eaff}
+    to{box-shadow:0 0 35px #00eaff}
+}
+
+/* NPCS */
+.npc{
+    position:absolute;
+    width:42px;
+    height:65px;
+    z-index:15;
+}
+
+.npcHead{
+    width:30px;
+    height:30px;
+    background:#d99b7b;
+    border-radius:50%;
+    margin:auto;
+    border:2px solid #111;
+}
+
+.npcBody{
+    width:38px;
+    height:35px;
+    background:#888;
+    margin:auto;
+    border-radius:8px;
+}
+
+.civilian .npcBody{
+    background:#53b9a7;
+}
+
+.teacher .npcBody{
+    background:#914ce0;
+}
+
+.villain .npcBody{
+    background:#d22e52;
+    box-shadow:0 0 15px #ff1744;
+}
+
+#teacher{
+    left:25%;
+    bottom:29%;
+}
+
+#civilian1{
+    left:12%;
+    bottom:27%;
+}
+
+#civilian2{
+    right:15%;
+    bottom:30%;
+}
+
+#villain{
+    right:23%;
+    bottom:28%;
+}
+
+/* HUD */
+#hud{
+    position:absolute;
+    top:10px;
+    left:10px;
+    right:10px;
+    z-index:100;
+}
+
+.panel{
+    background:#070a16dd;
+    border:2px solid #704bca;
+    border-radius:12px;
+    padding:8px;
+    box-shadow:0 0 15px #0008;
+}
+
+.bar{
+    width:180px;
+    height:14px;
+    background:#27293a;
+    border-radius:20px;
+    overflow:hidden;
+    margin:3px 0;
+}
+
+.fill{
+    height:100%;
+}
+
+#healthFill{
+    background:linear-gradient(90deg,#ff1744,#ff5b7c);
+}
+
+#energyFill{
+    background:linear-gradient(90deg,#00bfff,#6d5cff);
+}
+
+.stats{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    font-size:13px;
+}
+
+/* CONTROLS */
+#controls{
+    position:absolute;
+    bottom:15px;
+    left:15px;
+    right:15px;
+    z-index:200;
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+}
+
+.dpad{
+    display:grid;
+    grid-template-columns:55px 55px 55px;
+    grid-template-rows:55px 55px 55px;
+}
+
+.btn{
+    border:2px solid #a98cff;
+    background:#17132cdd;
+    color:white;
+    border-radius:15px;
+    font-size:22px;
+    font-weight:bold;
+    box-shadow:0 5px 15px #0009;
+}
+
+.btn:active{
+    background:#7149c6;
+    transform:scale(.94);
+}
+
+.up{grid-column:2}
+.left{grid-column:1;grid-row:2}
+.down{grid-column:2;grid-row:2}
+.right{grid-column:3;grid-row:2}
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    max-width:220px;
+    justify-content:end;
+}
+
+.action{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    font-size:11px;
+}
+
+.attack{
+    background:#b51e40;
+}
+
+.power{
+    background:#284ec7;
+}
+
+.special{
+    background:#7736d8;
+}
+
+.interact{
+    background:#138c67;
+}
+
+/* MENU */
+#menu{
+    position:absolute;
+    inset:0;
+    background:#060713ee;
+    z-index:500;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:20px;
+}
+
+.menuBox{
+    max-width:450px;
+    width:100%;
+    padding:25px;
+    background:linear-gradient(145deg,#171634,#0c0d1d);
+    border:3px solid #8e62ff;
+    border-radius:25px;
+    box-shadow:0 0 50px #8e62ff55;
+}
+
+.menuBox h1{
+    font-size:35px;
+    color:#bca1ff;
+    margin-bottom:8px;
+}
+
+.menuBox p{
+    color:#ccc;
+    margin-bottom:20px;
+}
+
+.bigButton{
+    width:100%;
+    padding:16px;
+    margin:7px 0;
+    border:0;
+    border-radius:12px;
+    background:#7348d5;
+    color:white;
+    font-weight:bold;
+    font-size:17px;
+}
+
+.bigButton:active{
+    background:#a378ff;
+}
+
+/* MISSION */
+#mission{
+    position:absolute;
+    top:105px;
+    right:10px;
+    z-index:120;
+    max-width:220px;
+}
+
+#message{
+    position:absolute;
+    bottom:145px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#080a16ee;
+    border:2px solid #6c52c9;
+    border-radius:12px;
+    padding:10px 15px;
+    z-index:250;
+    text-align:center;
+    max-width:90%;
+    display:none;
+}
+
+/* POWER SCREEN */
+#powerScreen{
+    position:absolute;
+    inset:0;
+    background:#050611f5;
+    z-index:450;
+    display:none;
+    padding:20px;
+    overflow:auto;
+}
+
+.powerCard{
+    background:#16162c;
+    border:2px solid #7255d4;
+    border-radius:15px;
+    padding:15px;
+    margin:10px auto;
+    max-width:500px;
+}
+
+.powerCard button{
+    padding:10px;
+    background:#6141ba;
+    color:white;
+    border:0;
+    border-radius:8px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+    #academy{
+        width:210px;
+        height:130px;
+        padding-top:42px;
+    }
+
+    #academy h1{
+        font-size:17px;
+    }
+
+    .bar{
+        width:140px;
+    }
+
+    .action{
+        width:58px;
+        height:58px;
+    }
+
+    .dpad{
+        grid-template-columns:48px 48px 48px;
+        grid-template-rows:48px 48px 48px;
+    }
+
+    .btn{
+        font-size:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div id="sky"></div>
+
+<div class="city">
+    <div class="building b1"><span></span></div>
+    <div class="building b2"><span></span></div>
+    <div class="building b3"><span></span></div>
+    <div class="building b4"><span></span></div>
+    <div class="building b5"><span></span></div>
+    <div id="road"></div>
+</div>
+
+<div id="academy">
+    <h1>POWER WIELDERS<br>ACADEMY</h1>
+</div>
+
+<!-- NPCS -->
+
+<div id="teacher" class="npc teacher">
+    <div class="npcHead"></div>
+    <div class="npcBody"></div>
+</div>
+
+<div id="civilian1" class="npc civilian">
+    <div class="npcHead"></div>
+    <div class="npcBody"></div>
+</div>
+
+<div id="civilian2" class="npc civilian">
+    <div class="npcHead"></div>
+    <div class="npcBody"></div>
+</div>
+
+<div id="villain" class="npc villain">
+    <div class="npcHead"></div>
+    <div class="npcBody"></div>
+</div>
+
+<!-- PLAYER -->
+
+<div id="player">
+    <div class="powerAura"></div>
+    <div class="head">
+        <div class="hair"></div>
+    </div>
+    <div class="body"></div>
+</div>
+
+<!-- HUD -->
+
+<div id="hud">
+    <div class="panel">
+        <b id="playerName">REN — POWER WIELDER</b>
+
+        <div>❤️ HP</div>
+        <div class="bar">
+            <div id="healthFill" class="fill"></div>
+        </div>
+
+        <div>⚡ ENERGY</div>
+        <div class="bar">
+            <div id="energyFill" class="fill"></div>
+        </div>
+
+        <div class="stats">
+            <span>⭐ Lv <b id="level">1</b></span>
+            <span>XP <b id="xp">0</b></span>
+            <span>💰 <b id="coins">100</b></span>
+            <span>⚔️ <b id="powerName">Storm</b></span>
+        </div>
+    </div>
+</div>
+
+<div id="mission" class="panel">
+    <b>MISSION</b>
+    <div id="missionText">
+        Defeat the villain!
+    </div>
+</div>
+
+<div id="message"></div>
+
+<!-- CONTROLS -->
+
+<div id="controls">
+
+    <div class="dpad">
+        <button class="btn up" data-key="ArrowUp">▲</button>
+        <button class="btn left" data-key="ArrowLeft">◀</button>
+        <button class="btn down" data-key="ArrowDown">▼</button>
+        <button class="btn right" data-key="ArrowRight">▶</button>
+    </div>
+
+    <div class="actions">
+        <button class="btn action attack" id="attackBtn">ATTACK</button>
+        <button class="btn action power" id="powerBtn">POWER</button>
+        <button class="btn action special" id="specialBtn">ULTIMATE</button>
+        <button class="btn action interact" id="interactBtn">TALK</button>
+    </div>
+
+</div>
+
+<!-- MAIN MENU -->
+
+<div id="menu">
+    <div class="menuBox">
+        <h1>POWER WIELDERS</h1>
+        <h2>ACADEMY</h2>
+        <p>
+            Become a legendary Power Wielder.<br>
+            Protect the city. Defeat villains.<br>
+            Master your power.
+        </p>
+
+        <button class="bigButton" onclick="startGame()">
+            ▶ START GAME
+        </button>
+
+        <button class="bigButton" onclick="openPowers()">
+            ⚡ POWERS
+        </button>
+
+        <button class="bigButton" onclick="resetGame()">
+            🗑 RESET SAVE
+        </button>
+    </div>
+</div>
+
+<!-- POWER SCREEN -->
+
+<div id="powerScreen">
+    <h1>⚡ POWER SYSTEM</h1>
+    <p>Choose your Power Wielder ability.</p>
+
+    <div class="powerCard">
+        <h2>🌩 Storm</h2>
+        <p>Lightning attacks with high speed.</p>
+        <button onclick="choosePower('Storm')">SELECT</button>
+    </div>
+
+    <div class="powerCard">
+        <h2>🔥 Inferno</h2>
+        <p>Fire attacks deal heavy damage.</p>
+        <button onclick="choosePower('Inferno')">SELECT</button>
+    </div>
+
+    <div class="powerCard">
+        <h2>❄️ Frost</h2>
+        <p>Ice powers slow enemies.</p>
+        <button onclick="choosePower('Frost')">SELECT</button>
+    </div>
+
+    <div class="powerCard">
+        <h2>🌑 Shadow</h2>
+        <p>Dark energy with critical strikes.</p>
+        <button onclick="choosePower('Shadow')">SELECT</button>
+    </div>
+
+    <div class="powerCard">
+        <h2>💚 Nature</h2>
+        <p>Regeneration and powerful vines.</p>
+        <button onclick="choosePower('Nature')">SELECT</button>
+    </div>
+
+    <button class="bigButton" onclick="closePowers()">CLOSE</button>
+</div>
+
+</div>
+
+<script>
+
+/* =====================================
+   GAME DATA
+===================================== */
+
+let game = {
+    running:false,
+
+    player:{
+        x:50,
+        y:70,
+        hp:100,
+        maxHp:100,
+        energy:100,
+        maxEnergy:100,
+        level:1,
+        xp:0,
+        coins:100,
+        power:"Storm"
+    },
+
+    villain:{
+        hp:150,
+        maxHp:150,
+        alive:true
+    },
+
+    mission:0
+};
+
+let keys = {};
+
+const player = document.getElementById("player");
+const villain = document.getElementById("villain");
+
+/* =====================================
+   SAVE / LOAD
+===================================== */
+
+function saveGame(){
+
+    localStorage.setItem(
+        "powerWieldersSave",
+        JSON.stringify(game)
+    );
+
+}
+
+function loadGame(){
+
+    const save =
+        localStorage.getItem("powerWieldersSave");
+
+    if(save){
+
+        try{
+            game = JSON.parse(save);
+        }
+        catch(e){
+            console.log("Save error");
+        }
+
+    }
+
+}
+
+/* =====================================
+   START
+===================================== */
+
+function startGame(){
+
+    game.running = true;
+
+    document.getElementById("menu").style.display="none";
+
+    showMessage(
+        "Welcome to Power Wielders Academy!"
+    );
+
+    updateHUD();
+
+}
+
+/* =====================================
+   MOVEMENT
+===================================== */
+
+document.addEventListener("keydown",e=>{
+    keys[e.key]=true;
+});
+
+document.addEventListener("keyup",e=>{
+    keys[e.key]=false;
+});
+
+document.querySelectorAll("[data-key]").forEach(btn=>{
+
+    const key=btn.dataset.key;
+
+    btn.addEventListener("pointerdown",()=>{
+        keys[key]=true;
+    });
+
+    btn.addEventListener("pointerup",()=>{
+        keys[key]=false;
+    });
+
+    btn.addEventListener("pointerleave",()=>{
+        keys[key]=false;
+    });
+
+});
+
+function movePlayer(){
+
+    if(!game.running) return;
+
+    let speed=.45;
+
+    if(keys["ArrowLeft"] || keys["a"])
+        game.player.x-=speed;
+
+    if(keys["ArrowRight"] || keys["d"])
+        game.player.x+=speed;
+
+    if(keys["ArrowUp"] || keys["w"])
+        game.player.y+=speed;
+
+    if(keys["ArrowDown"] || keys["s"])
+        game.player.y-=speed;
+
+    game.player.x=Math.max(4,Math.min(96,game.player.x));
+    game.player.y=Math.max(20,Math.min(78,game.player.y));
+
+    player.style.left=game.player.x+"%";
+    player.style.bottom=game.player.y+"%";
+
+}
+
+/* =====================================
+   COMBAT
+===================================== */
+
+function distanceToVillain(){
+
+    const villainX=77;
+    const villainY=28;
+
+    return Math.sqrt(
+        Math.pow(game.player.x-villainX,2)+
+        Math.pow(game.player.y-villainY,2)
+    );
+
+}
+
+function attack(){
+
+    if(!game.running) return;
+
+    if(distanceToVillain()>18){
+
+        showMessage("Move closer to the villain!");
+
+        return;
+    }
+
+    let damage=20;
+
+    if(game.player.power==="Inferno")
+        damage=28;
+
+    if(game.player.power==="Frost")
+        damage=22;
+
+    if(game.player.power==="Shadow")
+        damage=32;
+
+    if(game.player.power==="Nature")
+        damage=18;
+
+    game.villain.hp-=damage;
+
+    showMessage(
+        "⚔️ Attack! -" + damage + " HP"
+    );
+
+    enemyCheck();
+
+}
+
+function powerAttack(){
+
+    if(!game.running) return;
+
+    if(game.player.energy<20){
+
+        showMessage("Not enough energy!");
+
+        return;
+    }
+
+    if(distanceToVillain()>18){
+
+        showMessage("Move closer!");
+
+        return;
+    }
+
+    game.player.energy-=20;
+
+    let damage=40;
+
+    const power=game.player.power;
+
+    if(power==="Storm")
+        damage=45;
+
+    if(power==="Inferno")
+        damage=55;
+
+    if(power==="Frost")
+        damage=42;
+
+    if(power==="Shadow")
+        damage=60;
+
+    if(power==="Nature")
+        damage=35;
+
+    game.villain.hp-=damage;
+
+    showMessage(
+        "⚡ "+power+" POWER! -" + damage + " HP"
+    );
+
+    enemyCheck();
+
+}
+
+function ultimate(){
+
+    if(!game.running) return;
+
+    if(game.player.energy<60){
+
+        showMessage("You need 60 energy!");
+
+        return;
+    }
+
+    if(distanceToVillain()>25){
+
+        showMessage("Get closer to unleash your ultimate!");
+
+        return;
+    }
+
+    game.player.energy-=60;
+
+    let damage=100;
+
+    const power=game.player.power;
+
+    if(power==="Storm")
+        showMessage("🌩 THUNDER GOD: SKY BREAKER!");
+
+    if(power==="Inferno")
+        showMessage("🔥 INFERNO: METEOR BURST!");
+
+    if(power==="Frost")
+        showMessage("❄️ FROZEN WORLD!");
+
+    if(power==="Shadow")
+        showMessage("🌑 SHADOW: NIGHTMARE DOMAIN!");
+
+    if(power==="Nature")
+        showMessage("🌳 NATURE: WORLD ROOTS!");
+
+    game.villain.hp-=damage;
+
+    enemyCheck();
+
+}
+
+/* =====================================
+   ENEMY
+===================================== */
+
+function enemyCheck(){
+
+    if(game.villain.hp<=0){
+
+        game.villain.hp=0;
+
+        if(game.villain.alive){
+
+            game.villain.alive=false;
+
+            game.player.xp+=100;
+            game.player.coins+=250;
+
+            showMessage(
+                "🏆 VICTORY! Villain defeated! +100 XP +250 Coins"
+            );
+
+            levelCheck();
+
+            setTimeout(spawnVillain,5000);
+        }
+
+    }
+
+    updateHUD();
+
+}
+
+function spawnVillain(){
+
+    game.villain.hp=game.villain.maxHp;
+    game.villain.alive=true;
+
+    showMessage(
+        "⚠️ Another villain has appeared!"
+    );
+
+}
+
+/* =====================================
+   PLAYER DAMAGE
+===================================== */
+
+function enemyAttack(){
+
+    if(!game.running) return;
+
+    if(!game.villain.alive) return;
+
+    if(distanceToVillain()<14){
+
+        game.player.hp-=2;
+
+        if(game.player.hp<=0){
+
+            game.player.hp=0;
+
+            showMessage(
+                "💀 You were defeated! Returning to Academy..."
+            );
+
+            setTimeout(()=>{
+                game.player.hp=game.player.maxHp;
+                game.player.x=50;
+                game.player.y=70;
+            },1500);
+
+        }
+
+        updateHUD();
+
+    }
+
+}
+
+/* =====================================
+   LEVELING
+===================================== */
+
+function levelCheck(){
+
+    const needed=game.player.level*100;
+
+    if(game.player.xp>=needed){
+
+        game.player.xp-=needed;
+
+        game.player.level++;
+
+        game.player.maxHp+=20;
+        game.player.hp=game.player.maxHp;
+
+        game.player.maxEnergy+=10;
+        game.player.energy=game.player.maxEnergy;
+
+        showMessage(
+            "⭐ LEVEL UP! You are now Level "+
+            game.player.level+"!"
+        );
+
+    }
+
+}
+
+/* =====================================
+   INTERACTION
+===================================== */
+
+function interact(){
+
+    if(!game.running) return;
+
+    const x=game.player.x;
+    const y=game.player.y;
+
+    if(Math.abs(x-25)<12 && Math.abs(y-29)<12){
+
+        showMessage(
+            "👨‍🏫 TEACHER: A true Wielder protects civilians before seeking glory."
+        );
+
+        return;
+    }
+
+    if(Math.abs(x-12)<12){
+
+        showMessage(
+            "👥 CIVILIAN: Thank you for protecting our city!"
+        );
+
+        return;
+    }
+
+    if(Math.abs(x-50)<20 && y>60){
+
+        showMessage(
+            "🏫 ACADEMY: Train hard, Wielder."
+        );
+
+        return;
+    }
+
+    showMessage(
+        "There is nobody nearby to talk to."
+    );
+
+}
+
+/* =====================================
+   POWERS
+===================================== */
+
+function openPowers(){
+
+    document.getElementById("powerScreen").style.display="block";
+
+}
+
+function closePowers(){
+
+    document.getElementById("powerScreen").style.display="none";
+
+}
+
+function choosePower(power){
+
+    game.player.power=power;
+
+    closePowers();
+
+    showMessage(
+        "⚡ Power equipped: "+power
+    );
+
+    updateHUD();
+
+    saveGame();
+
+}
+
+/* =====================================
+   HUD
+===================================== */
+
+function updateHUD(){
+
+    document.getElementById("healthFill").style.width=
+        (game.player.hp/game.player.maxHp*100)+"%";
+
+    document.getElementById("energyFill").style.width=
+        (game.player.energy/game.player.maxEnergy*100)+"%";
+
+    document.getElementById("level").textContent=
+        game.player.level;
+
+    document.getElementById("xp").textContent=
+        game.player.xp;
+
+    document.getElementById("coins").textContent=
+        game.player.coins;
+
+    document.getElementById("powerName").textContent=
+        game.player.power;
+
+}
+
+/* =====================================
+   MESSAGE
+===================================== */
+
+let messageTimer;
+
+function showMessage(text){
+
+    const box=document.getElementById("message");
+
+    box.textContent=text;
+
+    box.style.display="block";
+
+    clearTimeout(messageTimer);
+
+    messageTimer=setTimeout(()=>{
+        box.style.display="none";
+    },2500);
+
+}
+
+/* =====================================
+   BUTTONS
+===================================== */
+
+document.getElementById("attackBtn")
+    .addEventListener("pointerdown",attack);
+
+document.getElementById("powerBtn")
+    .addEventListener("pointerdown",powerAttack);
+
+document.getElementById("specialBtn")
+    .addEventListener("pointerdown",ultimate);
+
+document.getElementById("interactBtn")
+    .addEventListener("pointerdown",interact);
+
+/* =====================================
+   ENERGY REGENERATION
+===================================== */
+
+setInterval(()=>{
+
+    if(game.running){
+
+        game.player.energy=
+            Math.min(
+                game.player.maxEnergy,
+                game.player.energy+2
+            );
+
+        updateHUD();
+
+    }
+
+},1000);
+
+/* =====================================
+   ENEMY AI
+===================================== */
+
+setInterval(enemyAttack,700);
+
+/* =====================================
+   GAME LOOP
+===================================== */
+
+function gameLoop(){
+
+    movePlayer();
+
+    if(game.running){
+
+        saveGame();
+        updateHUD();
+
+    }
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+/* =====================================
+   RESET
+===================================== */
+
+function resetGame(){
+
+    if(confirm("Delete your save?")){
+
+        localStorage.removeItem(
+            "powerWieldersSave"
+        );
+
+        location.reload();
+
+    }
+
+}
+
+/* =====================================
+   INITIALIZE
+===================================== */
+
+loadGame();
+
+updateHUD();
+
+gameLoop();
+
+</script>
+
+</body>
+</html>
